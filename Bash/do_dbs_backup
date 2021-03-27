@@ -6,6 +6,9 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 # Ex. Crontab: 0 */6 * * * do_dbs_backup
 
 ########## START USER-EDIT SECTION ##########
+# Logfile infos
+LOGFILE_LOCATION=/universal/path/to/logfile.log          ## Logfile location
+
 # Backup infos
 BACKUP_LOCATION=/universal/path/to/backup/location       ## Backup directory
 BACKUP_RETAIN_DATE=15                                    ## Number of days to keep local backup copy
@@ -19,9 +22,13 @@ SSL_CERTS_LOCATION=/universal/path/to/ssl_certs          ## Location of SSL cert
 SSL_CA=$SSL_CERTS_LOCATION/ca-cert.pem
 SSL_CERT=$SSL_CERTS_LOCATION/client-cert.pem
 SSL_KEY=$SSL_CERTS_LOCATION/client-key.pem
-########## STOP USER-EDIT SECTION ##########
+########## STOP USER-EDIT SECTION ###########
 
-####### DO NOT EDIT AFTER THIS POINT #######
+####### DO NOT EDIT AFTER THIS POINT ########
+# Insert start execution log in 'LOGFILE_LOCATION'
+DATE=`date`             ## Get current date-time
+echo "[$DATE] 'do_dbs_backup' started execution." >> $LOGFILE_LOCATION
+
 # Create backup location
 mkdir -p $BACKUP_LOCATION
 
@@ -62,3 +69,7 @@ for DIRS in $DATABASES
 do
     find $BACKUP_LOCATION/$DIRS -type f -mtime +$BACKUP_RETAIN_DATE -exec rm {} \;
 done
+
+# Insert completed execution log in 'LOGFILE_LOCATION'
+DATE=`date`             ## Get current date-time
+echo "[$DATE] 'do_dbs_backup' completed execution." >> $LOGFILE_LOCATION
