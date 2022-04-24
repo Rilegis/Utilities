@@ -1,0 +1,66 @@
+version: '3.9'
+
+services:
+  nextcloud:
+    image: nextcloud:latest
+    container_name: ${NEXTCLOUD_CONTAINER_NAME}
+    restart: always
+    ports:
+      - "127.0.0.1:${NEXTCLOUD_BIND_PORT}:80"
+    links:
+      - mysql
+    volumes:
+      - .nextcloud-data:/var/www/html
+      - .clamav-socket:/var/run/clamav/
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - MYSQL_PASSWORD=${MARIADB_USER_PASSWORD}
+      - MYSQL_DATABASE=${MARIADB_DATABASE}
+      - MYSQL_USER=${MARIADB_USER}
+      - MYSQL_HOST=mysql
+      - PHP_MEMORY_LIMIT=${NEXTCLOUD_PHP_MEMORY_LIMIT}
+      - PHP_UPLOAD_LIMIT=${NEXTCLOUD_PHP_UPLOAD_LIMIT}
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      - mysql
+      - clamav
+
+  mysql:
+    image: mariadb:latest
+    container_name: ${MARIADB_CONTAINER_NAME}
+    restart: always
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed
+    volumes:
+      - .mariadb-data:/var/lib/mysql
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MARIADB_USER_PASSWORD}
+      - MYSQL_DATABASE=${MARIADB_DATABASE}
+      - MYSQL_USER=${MARIADB_USER}
+    networks:
+      - backend
+
+  clamav:
+    image: clamav/clamav:stable_base
+    container_name: ${CLAMAV_CONTAINER_NAME}
+    restart: always
+    volumes:
+      - .clamav-socket:/var/run/clamav/
+      - .clamav-virusdb:/var/lib/clamav/
+    networks:
+      - backend
+
+volumes:
+  nextcloud-data:
+  mariadb-data:
+  clamav-socket:
+  clamav-virusdb:
+
+networks:
+  frontend:
+  backend:

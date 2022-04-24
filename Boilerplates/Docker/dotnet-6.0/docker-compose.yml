@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+  discordbot:
+    image: mcr.microsoft.com/dotnet/runtime:6.0
+    container_name: ${CONTAINER_NAME}
+    restart: unless-stopped
+    volumes:
+      - .application-data:/usr/data/application
+    working_dir: /usr/data/application
+    command: ./Application
+
+volumes:
+  application-data:
