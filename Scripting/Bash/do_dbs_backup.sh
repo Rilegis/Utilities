@@ -11,7 +11,7 @@ LOGFILE_LOCATION=/universal/path/to/logfile.log          ## Logfile location
 
 # Backup infos
 BACKUP_LOCATION=/universal/path/to/backup/location       ## Backup directory
-BACKUP_RETAIN_DATE=15                                    ## Number of days to keep local backup copy
+BACKUP_RETAIN_DAYS=15                                    ## Number of days to keep local backup copy
 
 # Login infos
 USERNAME=username
@@ -64,10 +64,10 @@ elif [ "$USE_SSL" = true ]; then
     done
 fi
 
-# Remove files older than BACKUP_RETAIN_DATE days
+# Remove files older than BACKUP_RETAIN_DAYS days
 for DIRS in $DATABASES
 do
-    find $BACKUP_LOCATION/$DIRS -type f -mtime +$BACKUP_RETAIN_DATE -exec rm {} \;
+    find $BACKUP_LOCATION/$DIRS -type f -mtime +$BACKUP_RETAIN_DAYS -exec rm {} \;
 done
 
 # Insert completed execution log in 'LOGFILE_LOCATION'
