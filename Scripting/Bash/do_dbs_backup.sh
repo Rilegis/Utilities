@@ -64,7 +64,7 @@ elif [ "$USE_SSL" = true ]; then
     done
 fi
 
-# Remove files older than BACKUP_RETAIN_DAYS days
+# Remove files older than 'BACKUP_RETAIN_DAYS' days
 for DIRS in $DATABASES
 do
     find $BACKUP_LOCATION/$DIRS -type f -mtime +$BACKUP_RETAIN_DAYS -exec rm {} \;
