@@ -12,9 +12,9 @@ BACKUP_RETAIN_DAYS=15                                   ## Number of days to kee
 while true
 do
   # Sleep for 30 minutes......why am i even commenting this?
-  echo "Waiting 30m for next backup execution..."
+  echo [`date`] "Waiting 30m for next backup execution..."
   sleep 30m
-  echo "Backup in progress..."
+  echo [`date`] "Backup in progress..."
 
   # Create a filename suffix
   FILENAME_SUFFIX=`date +%F-%H-%M`
@@ -29,5 +29,5 @@ do
   # Delete tarballs archives that are older than 'BACKUP_RETAIN_DAYS' days
   find $BACKUP_LOCATION -type f  -name "mc_server_*.tar.gz" -mtime +$BACKUP_RETAIN_DAYS -exec rm {} \;
 
-  echo "Backup completed."
+  echo [`date`] "Backup completed."
 done
