@@ -4,10 +4,11 @@ services:
   minecraft_server:
     image: eclipse-temurin:17-jre
     container_name: ${MC_CONTAINER_NAME}
-    restart: always
+    restart: unless-stopped
     ports:
       - "${MC_BIND_IP}:25565:25565"
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - .server-data:/usr/data/mc_server:rw
     environment:
       - PUID=${PUID}
@@ -17,21 +18,21 @@ services:
     working_dir: /usr/data/mc_server
     command: ./start
 
-# W.I.P
-#  rsync_backup:
-#    image: # MIGHT NEED CUSTOM IMAGE
-#    container_name: ${RS_CONTAINER_NAME}
-#    restart: always
-#    volumes:
-#      - .server-data:/usr/data/mc_server:ro
-#      - .server-backups:/usr/data/backups:rw
-#    environment:
-#      - PUID=${PUID}
-#      - PGID=${PGID}
-#    networks:
-#      - backend
-#    working_dir: /usr/data/backups
-#    command: ./do_backup.sh
+  rsync_backup:
+    image: rilegis/rsync:latest
+    container_name: ${RS_CONTAINER_NAME}
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - .server-data:/usr/data/mc_server:ro
+      - .server-backups:/usr/data/backups:rw
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+    networks:
+      - backend
+    working_dir: /usr/data/backups
+    command: ./do_backup.sh
 
 # W.I.P --- MAYBE
 #  minecraft_overviewer:
@@ -48,9 +49,9 @@ services:
 
 volumes:
   server-data:
-#  server-backups:
+  server-backups:
 #  server-render:
 
 networks:
   frontend:
-#  backend:
+  backend:
