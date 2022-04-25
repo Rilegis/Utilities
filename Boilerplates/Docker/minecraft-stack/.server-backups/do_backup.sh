@@ -24,7 +24,7 @@ do
   rsync -a --delete $SOURCE_LOCATION/ $BACKUP_LOCATION/mc_server # Generates a synced backup
 
   # Archive synced backup into tarball for redundancy
-  tar -czf mc_server_$FILENAME_SUFFIX.tar.gz $BACKUP_LOCATION
+  tar -czf mc_server_$FILENAME_SUFFIX.tar.gz $BACKUP_LOCATION/mc_server
 
   # Delete tarballs archives that are older than 'BACKUP_RETAIN_DAYS' days
   find $BACKUP_LOCATION -type f  -name "mc_server_*.tar.gz" -mtime +$BACKUP_RETAIN_DAYS -exec rm {} \;
