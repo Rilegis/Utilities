@@ -1,0 +1,4 @@
+docker:
+    command: "Update all images"
+        syntax: "docker images --format "{{.Repository}}:{{.Tag}}" | grep --invert-match '<none>' | xargs -L1 docker pull"
+        comment: "Execute as-is if user has docker privileges, otherwise elevate docker commands with sudo."
