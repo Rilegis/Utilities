@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  pihole:
+    image: pihole/pihole:latest
+    container_name: ${PIHOLE_CONTAINER_NAME}
+    restart: always
+    network_mode: "host" # Use for DHCP
+    #ports: # If DHCP is not possible, specify ports
+    #  - "53:53/tcp"
+    #  - "53:53/udp"
+    #  - "67:67/udp"
+    #  - "80:80/tcp"
+    environment:
+      WEBPASSWORD: '${PIHOLE_WEB_PASSWORD}'
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - .pihole-data:/etc/pihole
+      - .pihole-dnsmasqd:/etc/dnsmasq.d
+    cap_add:
+      - NET_ADMIN # Recommended but not required (REQUIRED FOR DHCP)
+
+volumes:
+  pihole-data:
+  pihole-dnsmasqd:
