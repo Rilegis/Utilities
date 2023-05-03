@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  cups:
+    build: ./build
+    container_name: ${CONTAINER_NAME}
+    restart: unless-stopped
+    ports:
+      - 631:631
+    #environment: # Use only to modify default password
+    #  - ADMIN_PASSWORD=
+    volumes:
+      - /var/run/dbus:/var/run/dbus
+      - .cups-data:/etc/cups
+    #devices: # Only for USB/parallel printers
+    #  - /dev/usb/lp0
+
+volumes:
+    cups-data:
