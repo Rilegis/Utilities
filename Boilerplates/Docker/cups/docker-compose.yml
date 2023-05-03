@@ -10,6 +10,7 @@ services:
     #environment: # Use only to modify default password
     #  - ADMIN_PASSWORD=
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - /var/run/dbus:/var/run/dbus
       - .cups-data:/etc/cups
     #devices: # Only for USB/parallel printers
