@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+  openvscode-server:
+    image: linuxserver/openvscode-server:latest
+    container_name: ${CONTAINER_NAME}
+    restart: unless-stopped
+    ports:
+      - 127.0.0.1:3000:3000
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIME_ZONE}
+      - CONNECTION_TOKEN=${CONNECTION_TOKEN}
+    volumes:
+      - .config:/config
+
+volumes:
+  config:
