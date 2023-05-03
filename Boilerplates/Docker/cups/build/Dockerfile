@@ -31,11 +31,13 @@ RUN apt-get update \
 
 # Create print user with correct groups and authorizations
 RUN adduser \
-  --groups=sudo,lp,lpadmin \
   --home /home/admin \
   --shell /bin/bash \
   --gecos "admin" \
-  --disabled-password admin
+  --disabled-password admin \
+  && adduser admin sudo \
+  && adduser admin lp \
+  && adduser admin lpadmin
 
 # Disable sudo password checking
 RUN echo 'admin ALL=(ALL:ALL) ALL' >> /etc/sudoers
